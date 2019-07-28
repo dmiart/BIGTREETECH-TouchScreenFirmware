@@ -18,13 +18,13 @@
 
 #include "lcd.h"
 #include "GUI.h"
-#include "language.h"
+#include "Language/language.h"
 
-#include "usart.h"
-#include "serial.h"
-#include "spi.h"
-#include "sw_spi.h"
-#include "spi_slave.h"
+#include "Hal/usart.h"
+#include "Hal/serial.h"
+#include "Hal/spi.h"
+#include "Hal/sw_spi.h"
+#include "Hal/spi_slave.h"
 
 #include "usbh_core.h"
 #include "usbh_usr.h"
@@ -34,7 +34,7 @@
 #include "w25qxx.h"
 #include "xpt2046.h"
 
-#include "LCD_Encoder.h"
+#include "lcd_encoder.h"
 #include "ST7920_Simulator.h"
 #include "ui_draw.h"
 #include "touch_process.h"
@@ -50,24 +50,24 @@
 
 
 //menu
-#include "menu.h"
-#include "Mainpage.h"
+#include "Menu/menu.h"
+#include "Menu/mainpage.h"
 
-#include "Heat.h"
-#include "Move.h"
-#include "Home.h"
-#include "Print.h"
-#include "Printing.h"
-#include "Speed.h"
-#include "BabyStep.h"
+#include "Menu/heat.h"
+#include "Menu/move.h"
+#include "Menu/home.h"
+#include "Menu/print.h"
+#include "Menu/printing.h"
+#include "Menu/speed.h"
+#include "Menu/babystep.h"
 
-#include "Extrude.h"
-#include "Fan.h"
-#include "Settings.h"
-#include "PowerFailed.h"
+#include "Menu/extrude.h"
+#include "Menu/fan.h"
+#include "Menu/settings.h"
+#include "Menu/powerfailed.h"
 
-#include "Popup.h"
-#include "Mode.h"
+#include "popup.h"
+#include "mode.h"
 
 //address in spiflash W25Qxx
 #define LOGO_ADDR               0x0
@@ -81,7 +81,7 @@
 
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
-typedef void (*FP_MENU)(void); 
+typedef void (*FP_MENU)(void);
 
 typedef struct
 {
@@ -101,7 +101,7 @@ enum
   ICON_FAN,
   ICON_SETTINGS,
   ICON_LEVELING,
-  
+
   ICON_INC,
   ICON_DEC,
   ICON_NOZZLE,
@@ -120,18 +120,18 @@ enum
   ICON_X_DEC,
   ICON_Y_DEC,
   ICON_Z_DEC,
-  
+
   ICON_X_HOME,
   ICON_Y_HOME,
   ICON_Z_HOME,
-  
+
   ICON_FOLDER,
   ICON_FILE,
   ICON_PAGE_UP,
   ICON_PAGE_DOWN,
   ICON_PAUSE,
   ICON_RESUME,
-  
+
   ICON_LOAD,
   ICON_UNLOAD,
   ICON_SLOW_SPEED,
@@ -140,7 +140,7 @@ enum
   ICON_E_1_MM,
   ICON_E_5_MM,
   ICON_E_10_MM,
-  
+
   ICON_FAN_FULL_SPEED,
   ICON_FAN_HALF_SPEED,
   ICON_POWER_OFF,
@@ -149,7 +149,7 @@ enum
   ICON_SCREEN_INFO,
   ICON_DISCONNECT,
   ICON_BAUDRATE,
-  
+
   ICON_PERCENTAGE,
   ICON_BABYSTEP,
   ICON_001_MM,
@@ -162,16 +162,15 @@ enum
 
 
 typedef struct
-{	
+{
   bool wait;       //Whether wait for Marlin's response
   bool rx_ok;      //Whether receive Marlin's response
   bool connected;  //Whether have connected to Marlin
-#ifdef ONBOARD_SD_SUPPORT     
+#ifdef ONBOARD_SD_SUPPORT
   bool printing;   //Whether the host is busy in printing execution. ( USB serial printing and GCODE print from onboard)
-#endif  
+#endif
 }HOST;
 
 extern HOST infoHost;
 
 #endif
-
